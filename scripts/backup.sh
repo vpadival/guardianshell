@@ -35,7 +35,15 @@ mkdir -p "$BACKUP_DIR"
 # 1. Find files matching the pattern
 echo "Scanning for matching files..."
 
-raw_list=$(find "$BACKUP_SRC" -maxdepth 1 -type f -regextype posix-extended -regex ".*/[^/]*${BACKUP_PATTERN}" -printf '%f\t%s\n')
+raw_list=$(
+    for file in "$BACKUP_SRC"/*; do
+        [ -f "$file" ] || continue
+        filename=$(basename "$file")
+        if printf '%s\n' "$filename" | grep -Eq "$BACKUP_PATTERN"; then
+            printf '%s\t%s\n' "$filename" "$(wc -c < "$file")"
+        fi
+    done
+)
 
 # 2. Count matching files using wc -l
 # We define 'backup_count' as an ordinary (local shell) variable.

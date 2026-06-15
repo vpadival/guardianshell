@@ -1,0 +1,37 @@
+# ==============================================================================
+# GuardianShell Daemon - Git Ignore List
+# ==============================================================================
+
+# Ignore local configuration file containing host-specific paths
+config/threshold.conf
+
+# Ignore local system monitor logs
+logs/
+
+# Ignore local backups and compressed archives
+backups/
+
+# Ignore Python virtual environment
+venv/
+.venv/
+ENV/
+env/
+
+# Ignore OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ignore Editor/IDE directories
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*~

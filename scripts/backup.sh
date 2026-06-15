@@ -32,10 +32,18 @@ fi
 # Ensure backup directory exists
 mkdir -p "$BACKUP_DIR"
 
-# 1. Use ls -l combined with egrep to find files matching the pattern
+# 1. Find files matching the pattern
 echo "Scanning for matching files..."
 
-raw_list=$(ls -l "$BACKUP_SRC" | grep -E '^-' | grep -E "$BACKUP_PATTERN")
+raw_list=$(
+    for file in "$BACKUP_SRC"/*; do
+        [ -f "$file" ] || continue
+        filename=$(basename "$file")
+        if printf '%s\n' "$filename" | grep -Eq "$BACKUP_PATTERN"; then
+            printf '%s\t%s\n' "$filename" "$(wc -c < "$file")"
+        fi
+    done
+)
 
 # 2. Count matching files using wc -l
 # We define 'backup_count' as an ordinary (local shell) variable.
@@ -49,10 +57,10 @@ fi
 
 echo "Found $backup_count matching file(s):"
 # Format and display the files with sizes
-echo "$raw_list" | awk '{print " - " $NF " (" $5 " bytes)"}'
+echo "$raw_list" | awk -F '\t' '{print " - " $1 " (" $2 " bytes)"}'
 
-# Extract the filenames (the last column of the ls -l output)
-filenames=$(echo "$raw_list" | awk '{print $NF}')
+# Extract the filenames
+filenames=$(echo "$raw_list" | awk -F '\t' '{print $1}')
 
 # 3. Create backup archive folder and backup file
 timestamp=$(date '+%Y%m%d_%H%M%S')

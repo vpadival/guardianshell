@@ -79,6 +79,7 @@ load_config() {
     fi
     
     # Source the threshold.conf file
+    # shellcheck source=/dev/null
     source "$CONFIG_FILE"
     
     # Export the configured thresholds and paths so child scripts inherit them
@@ -160,7 +161,7 @@ while true; do
     echo "=========================================================="
     
     # Read user input from stdin (FD 0)
-    read -p "Select an option [1-5]: " choice
+    read -r -p "Select an option [1-5]: " choice
     
     case "$choice" in
         1)
@@ -178,7 +179,7 @@ while true; do
             ;;
         2)
             echo ""
-            read -p "Enter source directory to scan/backup [default: $BACKUP_SRC]: " user_src
+            read -r -p "Enter source directory to scan/backup [default: $BACKUP_SRC]: " user_src
             user_src=${user_src:-$BACKUP_SRC}
             echo "Executing Smart Backup on directory: $user_src..."
             ./scripts/backup.sh "$user_src"
@@ -219,5 +220,5 @@ while true; do
     
     # Pause before displaying the menu again
     echo ""
-    read -p "Press [Enter] to return to the main menu..." temp
+    read -r -p "Press [Enter] to return to the main menu..." _
 done

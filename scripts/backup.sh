@@ -35,9 +35,7 @@ mkdir -p "$BACKUP_DIR"
 # 1. Use ls -l combined with egrep to find files matching the pattern
 echo "Scanning for matching files..."
 
-# We list all files in detail, filter for regular files (starting with '-'),
-# and use egrep to match the file pattern at the end of the line.
-raw_list=$(ls -l "$BACKUP_SRC" | egrep '^-' | egrep "$BACKUP_PATTERN")
+raw_list=$(ls -l "$BACKUP_SRC" | grep -E '^-' | grep -E "$BACKUP_PATTERN")
 
 # 2. Count matching files using wc -l
 # We define 'backup_count' as an ordinary (local shell) variable.

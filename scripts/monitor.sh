@@ -111,8 +111,8 @@ echo "---------------------------------------------"
 echo "Security Authentication Check:"
 
 if [ -r "$AUTH_LOG" ]; then
-    # Scan last 100 lines for authentication failure patterns using egrep
-    auth_failures=$(tail -n 100 "$AUTH_LOG" | egrep -i "(fail|invalid user|refused password|unauthorized|failed password)" | wc -l)
+    # Scan last 100 lines for authentication failure patterns using grep -E
+    auth_failures=$(tail -n 100 "$AUTH_LOG" | grep -Ei "(fail|invalid user|refused password|unauthorized|failed password)" | wc -l)
     
     echo "  - Log Checked   : $AUTH_LOG (last 100 entries)"
     echo "  - Failure Count : $auth_failures (Threshold: $MAX_AUTH_FAILURES)"
